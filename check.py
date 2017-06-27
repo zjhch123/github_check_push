@@ -9,7 +9,7 @@ username = 'zjhch123'
 notice = {
   'error': 'osascript -e \'display notification "无法获取到你今天是否已提交代码,记得提交哟~" with title "注意提交代码!"\'',
   'not': 'osascript -e \'display notification "你今天还没有在github上提交代码,记得去提交哟~" with title "注意提交代码!"\'',
-  'ok': 'osascript -e \'display notification "你今天已经提交过代码了~记得每天坚持哟~" with title "很棒棒!"\'',
+  'ok': 'osascript -e \'display notification "你今天已经提交过${num}次代码了~记得每天坚持哟~" with title "很棒棒!"\'',
 }
 def req():
   global username
@@ -21,7 +21,7 @@ def req():
     'Cookie': 'tz=Asia/Shanghai'
   }
   try:
-    r = requests.get('https://github.com/' + username, timeout = 5, headers = headers)  
+    r = requests.get('https://github.com/' + username, timeout = 10, headers = headers)  
   except BaseException as e:
     print(e)
   return r
@@ -40,7 +40,7 @@ try:
     if count == 0:
       os.system(notice['not'])
     else:
-      os.system(notice['ok'])
+      os.system(notice['ok'].replace('${num}', str(count)))
 except BaseException as e:
   print(e)
   os.system(notice['error'])
